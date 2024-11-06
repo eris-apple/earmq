@@ -53,6 +53,9 @@ func (s *Service) Init() error {
 
 // Disconnect — disconnecting from rabbitmq.
 func (s *Service) Disconnect() error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if err := s.conn.Close(); err != nil {
 		s.l.ErrorT(s.traceName, "Failed to disconnect from RabbitMQ", err)
 		return err
@@ -70,6 +73,9 @@ func (s *Service) GetClient() *Connection {
 
 // CreateChannel — creates a Channel with the specified name.
 func (s *Service) CreateChannel(name string) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if s.channels[name] != nil {
 		s.l.ErrorT(s.traceName, "A channel with that name already exists", name)
 		return errors.New("the channel already exists")
@@ -88,6 +94,9 @@ func (s *Service) CreateChannel(name string) error {
 
 // CloseChannel — closes the requested Channel.
 func (s *Service) CloseChannel(name string) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if _, err := s.GetChannel(name); err != nil {
 		return err
 	}
@@ -103,6 +112,9 @@ func (s *Service) CloseChannel(name string) error {
 
 // GetChannel — returns the instance of the requested Channel.
 func (s *Service) GetChannel(name string) (*Channel, error) {
+	if s.conn == nil {
+		return nil, errors.New("connection is not initialized")
+	}
 	if s.channels[name] == nil {
 		s.l.ErrorT(s.traceName, "A channel with that name was not found", name)
 		return nil, errors.New("the channel was not found")
@@ -113,6 +125,9 @@ func (s *Service) GetChannel(name string) (*Channel, error) {
 
 // CreateQueue — creates a new Queue based on the specified Queue and Channel names.
 func (s *Service) CreateQueue(name string, channelName string, durable bool) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if _, err := s.GetChannel(channelName); err != nil {
 		return err
 	}
@@ -142,6 +157,9 @@ func (s *Service) CreateQueue(name string, channelName string, durable bool) err
 
 // GetQueue — returns the instance of the requested Queue.
 func (s *Service) GetQueue(name string) (*Queue, error) {
+	if s.conn == nil {
+		return nil, errors.New("connection is not initialized")
+	}
 	if s.queues[name] == nil {
 		s.l.ErrorT(s.traceName, "A queue with this name was not found", name)
 		return nil, errors.New("the queue was not found")
@@ -152,6 +170,9 @@ func (s *Service) GetQueue(name string) (*Queue, error) {
 
 // PublishJSON — adds a JSON message to the Queue.
 func (s *Service) PublishJSON(name, channelName, exchange string, data interface{}) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if _, err := s.GetQueue(name); err != nil {
 		return err
 	}
@@ -184,6 +205,9 @@ func (s *Service) PublishJSON(name, channelName, exchange string, data interface
 
 // PublishString — adds a string message to the Queue.
 func (s *Service) PublishString(name, channelName, exchange string, data string) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if _, err := s.GetQueue(name); err != nil {
 		return err
 	}
@@ -210,6 +234,9 @@ func (s *Service) PublishString(name, channelName, exchange string, data string)
 
 // AddConsumer — adds a message handler from the Queue.
 func (s *Service) AddConsumer(queueName string, channelName string, taskLimitCount int, consumer func(d Delivery)) error {
+	if s.conn == nil {
+		return errors.New("connection is not initialized")
+	}
 	if _, err := s.GetQueue(queueName); err != nil {
 		return err
 	}

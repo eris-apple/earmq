@@ -3,7 +3,8 @@ module github.com/eris-apple/earmq
 go 1.23.1
 
 require (
-	github.com/eris-apple/ealogger v0.0.1
+	github.com/eris-apple/ealogger v0.0.2
+	github.com/eris-apple/eautils v0.0.2
 	github.com/streadway/amqp v1.1.0
 )
 
@@ -12,7 +13,6 @@ require (
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/log v0.4.0 // indirect
 	github.com/charmbracelet/x/ansi v0.4.2 // indirect
-	github.com/eris-apple/eautils v0.0.2 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
